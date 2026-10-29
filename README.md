@@ -41,6 +41,15 @@ Requisitos: Rust stable, [NASM](https://nasm.us) no PATH (usado pelo encoder AVI
 cargo test
 ```
 
+Instalar o menu de clique direito (usuário atual, sem admin):
+
+```powershell
+cargo build --release
+powershell -ExecutionPolicy Bypass -File scripts\install-menu.ps1
+```
+
+Remover: `powershell -ExecutionPolicy Bypass -File scripts\uninstall-menu.ps1`
+
 ## Licença
 
 A definir. O FFmpeg é distribuído como executável separado sob LGPL.

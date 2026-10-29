@@ -31,6 +31,8 @@ Workspace Cargo (`Cargo.toml` na raiz, `members = ["crates/*"]`, resolver 3, edi
   - Decode de AVIF **não** está habilitado (exigiria feature `avif-native`/dav1d).
 - `crates/cli` (`coverwin-cli`) — fino wrapper `clap` sobre o core. Processa arquivos em sequência, continua após falhas e sai com `ExitCode::FAILURE` se algum falhar (o menu de contexto vai depender disso).
 
+- `scripts/install-menu.ps1` / `uninstall-menu.ps1` — menu de contexto fase 1: submenu cascata em `HKCU\...\SystemFileAssociations\.<ext>\shell\coverwin` (`MUIVerb` + `SubCommands=""` + subchaves `shell\NNfmt\command`). Cada item chama `conhost.exe --headless coverwin-cli.exe convert "%1" --to <fmt>` (sem janela; erros ficam invisíveis por ora). Explorer invoca uma vez por arquivo selecionado. Aponta por padrão para `target\release\coverwin-cli.exe` — rodar `cargo build --release` antes; listas de extensões estão duplicadas nos dois scripts.
+
 Planejado (ainda não existe): `crates/shell` (extensão `IExplorerCommand`) e `app/` (Tauri). Dependências `rayon`, `serde`, `toml`, `tracing*` já estão declaradas mas ainda não usadas.
 
 ## Regras
@@ -50,7 +52,7 @@ Planejado (ainda não existe): `crates/shell` (extensão `IExplorerCommand`) e `
 
 ## Roadmap
 1. ✅ `core` + `cli` (imagens)
-2. Registro do menu de contexto chamando a CLI
+2. ✅ Registro do menu de contexto chamando a CLI
 3. App Tauri: arrastar e soltar, fila, progresso
 4. Instalador NSIS com menu + sidecar ffmpeg
 5. `IExplorerCommand` + MSIX
