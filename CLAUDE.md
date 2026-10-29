@@ -31,7 +31,9 @@ Workspace Cargo (`Cargo.toml` na raiz, `members = ["crates/*"]`, resolver 3, edi
   - Decode de AVIF **não** está habilitado (exigiria feature `avif-native`/dav1d).
 - `crates/cli` (`coverwin-cli`) — fino wrapper `clap` sobre o core. Processa arquivos em sequência, continua após falhas e sai com `ExitCode::FAILURE` se algum falhar (o menu de contexto vai depender disso).
 
-- `scripts/install-menu.ps1` / `uninstall-menu.ps1` — menu de contexto fase 1: submenu cascata em `HKCU\...\SystemFileAssociations\.<ext>\shell\coverwin` (`MUIVerb` + `SubCommands=""` + subchaves `shell\NNfmt\command`). Cada item chama `conhost.exe --headless coverwin-cli.exe convert "%1" --to <fmt>` (sem janela; erros ficam invisíveis por ora). Explorer invoca uma vez por arquivo selecionado. Aponta por padrão para `target\release\coverwin-cli.exe` — rodar `cargo build --release` antes; listas de extensões estão duplicadas nos dois scripts.
+- `scripts/install-menu.ps1` / `uninstall-menu.ps1` — menu de contexto fase 1: submenu cascata em `HKCU\...\SystemFileAssociations\.<ext>\shell\coverwin` (`MUIVerb` + `ExtendedSubCommandsKey=coverwin.menu.<fmt>`, com os itens em `HKCU\Software\Classes\coverwin.menu.<fmt>\shell\NNfmt\command`; a forma `SubCommands=""` com `shell` aninhado não apareceu neste Windows). Cada item chama `conhost.exe --headless coverwin-cli.exe convert "%1" --to <fmt>` (sem janela; erros ficam invisíveis por ora). Explorer invoca uma vez por arquivo selecionado. Aponta por padrão para `target\release\coverwin-cli.exe` — rodar `cargo build --release` antes; listas de extensões estão duplicadas nos dois scripts.
+
+  - **Atenção:** o Claude desktop é um app MSIX; processos iniciados por ele têm gravações em `HKCU\Software\Classes` virtualizadas — o Explorer não as vê. Rode os scripts de menu pelo painel Terminal do app (`run_in_terminal`), que não é virtualizado — nunca pelas ferramentas Bash/PowerShell.
 
 Planejado (ainda não existe): `crates/shell` (extensão `IExplorerCommand`) e `app/` (Tauri). Dependências `rayon`, `serde`, `toml`, `tracing*` já estão declaradas mas ainda não usadas.
 
