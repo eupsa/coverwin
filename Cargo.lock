@@ -608,7 +608,7 @@ dependencies = [
 
 [[package]]
 name = "coverwin-app"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "coverwin-core",
  "serde",
@@ -620,7 +620,7 @@ dependencies = [
 
 [[package]]
 name = "coverwin-cli"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -633,7 +633,7 @@ dependencies = [
 
 [[package]]
 name = "coverwin-core"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "image",
  "rayon",
