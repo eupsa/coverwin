@@ -34,7 +34,7 @@ fn main() -> ExitCode {
     let Command::Convert { files, to, quality } = Cli::parse().command;
     let mut failed = false;
     for file in &files {
-        match coverwin_core::convert(file, to, quality) {
+        match coverwin_core::convert(file, to, quality, None) {
             Ok(out) => println!("{} -> {}", file.display(), out.display()),
             Err(e) => {
                 eprintln!("{}: {e}", file.display());

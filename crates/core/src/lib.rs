@@ -70,11 +70,21 @@ impl std::str::FromStr for Format {
     }
 }
 
-/// Converte `input` para `format`, salvando ao lado do original. Nunca sobrescreve: usa "nome (1).ext" se preciso.
+/// Converte `input` para `format`, salvando em `out_dir` (ou ao lado do original). Nunca sobrescreve: usa "nome (1).ext" se preciso.
 /// `quality` (1–100) vale para JPG, WebP e AVIF.
-pub fn convert(input: &Path, format: Format, quality: u8) -> Result<PathBuf, Error> {
+pub fn convert(
+    input: &Path,
+    format: Format,
+    quality: u8,
+    out_dir: Option<&Path>,
+) -> Result<PathBuf, Error> {
     let img = image::open(input)?;
-    let output = free_path(&input.with_extension(format.extension()));
+    let target = input.with_extension(format.extension());
+    let target = match (out_dir, target.file_name()) {
+        (Some(dir), Some(file)) => dir.join(file),
+        _ => target,
+    };
+    let output = free_path(&target);
     let quality = quality.clamp(1, 100);
 
     match format {
@@ -141,14 +151,20 @@ mod tests {
             .unwrap();
 
         for f in Format::ALL {
-            let out = convert(&src, f, 80).unwrap();
+            let out = convert(&src, f, 80, None).unwrap();
             assert!(out.exists(), "{f:?}");
             assert_eq!(image::open(&out).is_ok(), f != Format::Avif, "{f:?}"); // decode de AVIF não está habilitado
         }
         // a.png e a (1).png (do loop) já existem → a (2).png
         assert_eq!(
-            convert(&src, Format::Png, 80).unwrap(),
+            convert(&src, Format::Png, 80, None).unwrap(),
             dir.join("a (2).png")
+        );
+        let out_dir = dir.join("saida");
+        std::fs::create_dir(&out_dir).unwrap();
+        assert_eq!(
+            convert(&src, Format::Webp, 80, Some(&out_dir)).unwrap(),
+            out_dir.join("a.webp")
         );
         assert!("JPEG".parse::<Format>().is_ok() && "xyz".parse::<Format>().is_err());
     }

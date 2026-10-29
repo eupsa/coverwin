@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/* Tokens Fluent 2 (Windows 11). Fundo transparente: a janela usa o efeito Mica. */
+@theme {
+	--font-sans: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+	--font-display:
+		"Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+	--radius-control: 4px;
+	--radius-card: 8px;
+	--color-layer: rgb(255 255 255 / 0.5);
+	--color-card: rgb(255 255 255 / 0.7);
+	--color-card-hover: rgb(249 249 249 / 0.85);
+	--color-subtle: rgb(0 0 0 / 0.04);
+	--color-stroke: rgb(0 0 0 / 0.08);
+	--color-text: #1a1a1a;
+	--color-text-2: #5d5d5d;
+	--color-text-3: #8a8a8a;
+	--color-accent: #005fb8;
+	--color-accent-hover: #1975c5;
+	--color-on-accent: #ffffff;
+	--color-success: #0f7b0f;
+	--color-danger: #c42b1c;
+	--ease-fluent: cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-layer: rgb(58 58 58 / 0.3);
+		--color-card: rgb(255 255 255 / 0.05);
+		--color-card-hover: rgb(255 255 255 / 0.08);
+		--color-subtle: rgb(255 255 255 / 0.06);
+		--color-stroke: rgb(255 255 255 / 0.08);
+		--color-text: #ffffff;
+		--color-text-2: #c5c5c5;
+		--color-text-3: #9a9a9a;
+		--color-accent: #60cdff;
+		--color-accent-hover: #7ad5ff;
+		--color-on-accent: #000000;
+		--color-success: #6ccb5f;
+		--color-danger: #ff99a4;
+	}
+}
+
+html,
+body {
+	background: transparent;
+	color: var(--color-text);
+	font-family: var(--font-sans);
+	font-size: 14px;
+	user-select: none;
+	overflow: hidden;
+}
+
+/* xadrez para mostrar transparência nas prévias */
+.checker {
+	background-image: conic-gradient(
+		var(--color-subtle) 25%,
+		transparent 0 50%,
+		var(--color-subtle) 0 75%,
+		transparent 0
+	);
+	background-size: 16px 16px;
+}
+
+@keyframes float {
+	50% {
+		transform: translateY(-6px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}

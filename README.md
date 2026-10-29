@@ -41,6 +41,13 @@ Requisitos: Rust stable, [NASM](https://nasm.us) no PATH (usado pelo encoder AVI
 cargo test
 ```
 
+App em modo dev (dentro de `app/`):
+
+```powershell
+pnpm install
+pnpm tauri dev
+```
+
 Instalar o menu de clique direito (usuário atual, sem admin):
 
 ```powershell
