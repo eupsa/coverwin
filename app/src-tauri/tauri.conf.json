@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "identifier": "com.coverwin.app",
   "build": {
-    "beforeDevCommand": "pnpm dev",
+    "beforeDevCommand": "pnpm sidecar && pnpm dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm sidecar && pnpm build",
     "frontendDist": "../build"
   },
   "app": {
@@ -40,13 +40,32 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": [
+      "nsis"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "externalBin": [
+      "binaries/coverwin-cli"
+    ],
+    "resources": {
+      "../../scripts/install-menu.ps1": "install-menu.ps1",
+      "../../scripts/uninstall-menu.ps1": "uninstall-menu.ps1"
+    },
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": [
+          "PortugueseBR",
+          "English"
+        ],
+        "installerHooks": "installer.nsh"
+      }
+    }
   }
 }

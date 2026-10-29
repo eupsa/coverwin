@@ -20,6 +20,7 @@ cargo run -p coverwin-cli -- convert a.png b.jpg --to webp -q 80
 pnpm.cmd tauri dev                            # app em dev (hot reload)
 pnpm.cmd check                                # svelte-check
 pnpm.cmd exec biome check --write src         # lint + format do frontend
+pnpm.cmd tauri build                          # instalador → target/release/bundle/nsis/coverwin_<ver>_x64-setup.exe
 ```
 
 - No PowerShell deste PC o shim `pnpm.ps1` sai sem fazer nada — use **`pnpm.cmd`**.
@@ -47,6 +48,7 @@ Workspace Cargo (`Cargo.toml` na raiz, `members = ["crates/*", "app/src-tauri"]`
   - Janela sem moldura (`decorations: false`, `transparent`, efeito **Mica**) com barra de título própria (`data-tauri-drag-region` + permissões `core:window:allow-*` em `capabilities/default.json`). Fundo do `body` é transparente — use os tokens translúcidos de `app.css` (`bg-layer`, `bg-card`).
   - Prévias usam `convertFileSrc` → exige feature `protocol-asset` e `assetProtocol` (escopo `**`) + `img-src asset:` na CSP.
   - **SvelteKit 3:** não existe `svelte.config.js` — config (adapter-static com `fallback: "index.html"`) vai em `sveltekit({...})` no `vite.config.js`; `tsconfig.json` estende `$app/tsconfig`. Import de `$lib` não resolveu no svelte-check: use caminho relativo.
+  - **Instalador NSIS** (`installMode: currentUser`, sem admin): `coverwin-cli` entra como sidecar (`externalBin`) — `pnpm sidecar` (`app/scripts/prepare-sidecar.mjs`, roda antes de dev e build) compila a CLI em release e copia para `src-tauri/binaries/coverwin-cli-<host-tuple>.exe` (gitignored; o `tauri-build` falha sem ele, inclusive em dev). Os dois `.ps1` de `scripts/` vão como `resources` para `$INSTDIR`, e `src-tauri/installer.nsh` os executa nos hooks pós-instalação/pré-desinstalação — o menu do Explorer passa a apontar para `$INSTDIR\coverwin-cli.exe`. FFmpeg ainda não é empacotado (core não faz vídeo).
   - TypeScript fixo em 6.x: TS 7 ainda não é suportado por SvelteKit 3/svelte-check.
 
 Mudanças que atravessam arquivos:
@@ -75,5 +77,5 @@ Planejado (ainda não existe): `crates/shell` (extensão `IExplorerCommand`). De
 1. ✅ `core` + `cli` (imagens)
 2. ✅ Registro do menu de contexto chamando a CLI
 3. ✅ App Tauri: arrastar e soltar, fila com prévias, progresso, pasta de destino
-4. Instalador NSIS com menu + sidecar ffmpeg
+4. ✅ Instalador NSIS com menu (sidecar ffmpeg fica para quando houver vídeo)
 5. `IExplorerCommand` + MSIX
