@@ -1,0 +1,33 @@
+# Rust
+/target/
+**/target/
+
+# Node / frontend
+node_modules/
+.svelte-kit/
+build/
+dist/
+.vite/
+
+# Tauri
+app/src-tauri/gen/schemas/
+# sidecar ffmpeg é baixado no build, não versionado
+app/src-tauri/binaries/
+
+# Saídas de testes de conversão
+crates/core/tests/output/
+
+# Logs / env
+*.log
+.env
+.env.*
+!.env.example
+
+# Editor / SO
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+.DS_Store
